@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Página de Java Script, usando operadores matemáticos, simulando um programa financeiro">
+    <meta name="keywords" content="Java Script, operadores matemáticos, codar"> 
+    <meta name="author" content="Gleyce Pereira">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="saco_de_dinheiro.png">
+    <title>E o Banco, hein?</title>
+
+    <style>
+        body{
+            background-image: url("banco.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+    <script>
+
+        var nome = prompt("Olá, como se chama?");
+        alert("Olá " + nome + ", é um prazer ter você por aqui");
+		
+		var saldo = 100.5; //Variavel Global
+        var transacoes = [
+            { tipo: 'Depósito', valor: 300 },
+            { tipo: 'Saque', valor: 100 },
+            { tipo: 'Transferência', valor: 99.50 }
+        ];
+		
+
+		function inicio() {
+			//ESCOPO
+			//Variavel Local
+			var escolha = parseInt(prompt('Selecione uma opção \n1-Saldo 2-Extrato 3-Saque 4-Depósito 5-Trasferência 6-Sair'));
+		
+            switch (escolha){
+                case 1:
+                    if(acesso_senha()){
+                      ver_saldo();  
+                    }
+                break
+
+                case 2:
+                    if (acesso_senha()){
+                        ver_extrato();
+                    }
+                break;
+
+                case 3: 
+                    if (acesso_senha()){
+                        fazer_saque();
+                    }
+                break;
+
+                case 4: 
+                    if (acesso_senha()){
+                        fazer_deposito();
+                    }
+                break;
+
+                case 5:
+                    if(acesso_senha()){
+                        fazer_transferencia();
+                    } 
+                break;
+
+                case 6: 
+                    sair();
+                break;
+
+                default:
+                erro();
+
+            }
+
+
+            function ver_saldo() {
+                
+                alert('Seu saldo atual é: ' + saldo);
+                inicio();
+            }
+
+            function ver_extrato() {
+
+                // Inicializa uma variável para calcular o saldo atual
+                var saldoAtual = 0;
+
+                // Constrói o extrato a partir das transações
+                var extrato = 'Extrato\n';
+                for (var i = 0; i < transacoes.length; i++) {
+                    var transacao = transacoes[i];
+                    extrato += transacao.tipo + ': ' + transacao.valor + '\n';
+                    saldoAtual += (transacao.tipo === 'Depósito') ? transacao.valor : -transacao.valor;
+                }
+
+                extrato += 'Saldo Atual: ' + saldoAtual;
+
+                alert(transacao && extrato);
+
+                // Retorna ao menu principal
+                inicio();
+            }
+
+            function fazer_saque(){
+             
+                var saque = parseFloat(prompt("Qual o valor do saque?"));
+
+                if (isNaN(saque) || saque === '' ){
+                    alert("Operação não autorizada, informe um número");
+                    fazer_saque();
+                } else if (saque <=0){
+                    alert("Operação não autorizada, o valor não pode ser menor ou igual a zero");
+                    fazer_saque();
+                }else if (saque > saldo){
+                    alert("Operação não autorizada, saldo insuficiente")
+                    fazer_saque();
+                }else{
+                    transacoes.push({tipo:'Saque', valor: saque});
+                    saldo -= saque
+                    ver_saldo();
+                }
+            }
+
+
+            function fazer_deposito(){
+           
+                var deposito = parseFloat(prompt("Qual o valor do deposito?"));
+
+                if (isNaN(deposito) || deposito === ''){
+                    alert("Por favor, informe um número");
+                    fazer_deposito();
+                } else if (deposito <=0){
+                    alert("Por favor, o valor não pode ser menor ou igual a zero");
+                    fazer_deposito();
+                }else{
+                    transacoes.push({tipo: 'Depósito', valor: deposito});
+                    saldo += deposito;
+                    ver_saldo();
+                }
+            }
+
+
+            function fazer_transferencia(){
+           
+                var num_conta = parseInt(prompt("Por favor, digite o número da conta"));
+                var transferir =parseFloat(prompt("Qual o valor da transferência?"));
+
+                if (isNaN(num_conta) || num_conta ===''){
+                    alert("Por favor, informe um número")
+                    fazer_transferencia();
+                }
+
+                if (isNaN(transferir) || transferir === ""){
+                    alert("Operação não autorizada, informe um número");
+                    fazer_transferencia();
+                }else if (transferir <=0){
+                    alert("Operação não autorizada, o valor não pode ser menor ou igual a zero");
+                    fazer_transferencia();
+                }else if (transferir > saldo){
+                    alert("Operação não autorizada, saldo insuficiente")
+                    fazer_transferencia();
+                }else{
+                    transacoes.push({tipo:"Transferência", valor: transferir});
+                    saldo -= transferir;
+                    ver_saldo();
+                }
+            }
+
+
+            function erro() {
+                alert('Por favor, informe um número entre 1 e 4.');
+                inicio();
+            }
+
+            function sair() {
+                var confirma = confirm('Você deseja sair?');
+                if (confirma) {
+                    alert(nome + ", foi um prazer ter você por aqui!");
+                } else {
+                    inicio();
+                }
+            }
+
+            function acesso_senha(senha){
+                var senha = parseInt(prompt("Digite a senha:"));
+
+                if (senha !== 3589) {
+                    alert("Senha incorreta!");
+                    inicio();
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
+
+
+		inicio();
+	</script>
+</body>
+</html>
